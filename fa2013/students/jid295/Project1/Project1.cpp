@@ -71,7 +71,7 @@ int compare(char* str1, char* str2) {
 int indexedDictLen(char* indexedDictionary[BIG_BUFFER]) {
     int i = 0;
     while(indexedDictionary[i]) { ++i; }
-    return i;
+    return i-1;
 }
 
 /* Writes to indexedDict the pointers to each word in a dictionary. */
