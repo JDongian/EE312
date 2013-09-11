@@ -78,9 +78,9 @@ void generalTest2(void) {
 /* you should also make your own tests! */
 int main(void) {
 	/* for starters, uncomment the following tests, one at a time */
+	generalTest2();
 	fruityTest();
 	dogTest();
 	punctuationTests();
 	generalTest1();
-	generalTest2();
 }	
