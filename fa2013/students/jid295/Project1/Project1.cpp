@@ -13,7 +13,7 @@
 #define BIG_BUFFER (1 << 27)
 
 /* A large buffer to hold dictionary indexes*/
-char* indexedDict[BIG_BUFFER] = {NULL}; 
+char* indexedDict[BIG_BUFFER] = {NULL};
 
 /* Verifies that the given char is in the English alphabet. */
 bool isLetter(char letter) {
@@ -25,11 +25,11 @@ bool isLetter(char letter) {
 /* Lowercase-ify the given string. */
 char* toLower(char word[]) {
     int i = 0;
-    while(word[i]) {
+    while (word[i]) {
         /* Short circuit when lowercase input given. */
-        if(word[i] <= 'Z' && 'A' <= word[i]) {
+        if (word[i] <= 'Z' && 'A' <= word[i]) {
             /* Offset word to lowercase. */
-            word[i] -= 'A'-'a'; 
+            word[i] -= 'A'-'a';
         }
         i++;
     }
@@ -46,10 +46,10 @@ char* toLower(char word[]) {
 int compare(char* str1, char* str2) {
     /* Compare each character from the beginning,
        returning the result of the first difference. */
-    while(1) {
-        if(*str1 == *str2) {
+    while (1) {
+        if (*str1 == *str2) {
             /* If we haven't reached the end yet, increment. */
-            if(*str1 && *str1 != '\n') {
+            if (*str1 && *str1 != '\n') {
                 ++str1;
                 ++str2;
                 continue;
@@ -58,11 +58,11 @@ int compare(char* str1, char* str2) {
             }
         }
         /* Also let \n be a string delimiter, so I can reuse this method. */
-        if((!*str1 || *str1 == '\n') && (!*str2 || *str2 == '\n'))
+        if ((!*str1 || *str1 == '\n') && (!*str2 || *str2 == '\n'))
             return 0;
-        if(*str1 < *str2)
+        if (*str1 < *str2)
             return -1;
-        if(*str1 > *str2)
+        if (*str1 > *str2)
             return 1;
     }
 }
@@ -70,7 +70,7 @@ int compare(char* str1, char* str2) {
 /* Return dictionary size (number of words in dictionary). */
 int indexedDictLen(char* indexedDictionary[BIG_BUFFER]) {
     int i = 0;
-    while(indexedDictionary[i]) { ++i; }
+    while (indexedDictionary[i]) { ++i; }
     return i-1;
 }
 
@@ -79,16 +79,16 @@ void indexDictionary(char* dictionary) {
     int i = 0;
     /* Clear out the buffer lazily,
      * assuming that all \0's are contiguous with the end. */
-    while(indexedDict[i]) { indexedDict[i++] = NULL; }
+    while (indexedDict[i]) { indexedDict[i++] = NULL; }
     i = 0;
-    while(*dictionary && *dictionary == '\n') { ++dictionary; }
-    while(*dictionary) {
+    while (*dictionary && *dictionary == '\n') { ++dictionary; }
+    while (*dictionary) {
         /* Assign beginning of new word into indexedDict */
         indexedDict[i++] = dictionary;
         /* Walk through the non-\n characters */
-        while(*dictionary && *dictionary != '\n') { ++dictionary; }
+        while (*dictionary && *dictionary != '\n') { ++dictionary; }
         /* Walk through the \n character(s) */
-        while(*dictionary && *dictionary == '\n') { ++dictionary; }
+        while (*dictionary && *dictionary == '\n') { ++dictionary; }
     }
 }
 
@@ -100,18 +100,18 @@ void sortIndexedDict(char* indexedDictionary[BIG_BUFFER]) {
     int min;
     int length = indexedDictLen(indexedDictionary);
     char* tmpWord;
-     
-    for(j = 0; j < length-1; j++) {
+
+    for (j = 0; j < length-1; j++) {
         min = j;
-        for(i = j+1; i < length; i++) {
-            if(compare(indexedDictionary[i], indexedDictionary[min]) == -1) {
+        for (i = j+1; i < length; i++) {
+            if (compare(indexedDictionary[i], indexedDictionary[min]) == -1) {
                 min = i;
             }
         }
         /* min is index of minimum element.
          * Swap it with current position j.
          */
-        if(min != j) {
+        if (min != j) {
             tmpWord = indexedDictionary[j];
             indexedDictionary[j] = indexedDictionary[min];
             indexedDictionary[min] = tmpWord;
@@ -123,13 +123,13 @@ void sortIndexedDict(char* indexedDictionary[BIG_BUFFER]) {
  * Uses deferred equality detection iterative binary search.
  */
 bool inDict(char* key, char* indexedDictionary[BIG_BUFFER]) {
-    int min = 0;    
+    int min = 0;
     int max = indexedDictLen(indexedDictionary);
     int mid = 0;
-    //printIndexedDict(indexedDictionary);
-    while(min < max) {
+    // printIndexedDict(indexedDictionary);
+    while (min < max) {
         mid = (min+max)/2;
-        if(compare(indexedDictionary[mid], key) == -1) {
+        if (compare(indexedDictionary[mid], key) == -1) {
             min = mid+1;
         } else {
             max = mid;
@@ -146,25 +146,25 @@ void spellCheck(char article[], char dictionary[]) {
     toLower(dictionary);
     indexDictionary(dictionary);
     /* If the dictionary is not sorted, sort it. */
-    //sortIndexedDict(indexedDict);
+    // sortIndexedDict(indexedDict);
     /* Get rid of prefixed garbage. */
-    while(*article && !isLetter(*article)) { ++article; }
-    while(*article) {
+    while (*article && !isLetter(*article)) { ++article; }
+    while (*article) {
         wordLen = 0;
         /* Save the new word's position. */
         nextWord = article;
         /* Measure the word's length. */
-        while(isLetter(*article)) { ++wordLen; ++article; }
+        while (isLetter(*article)) { ++wordLen; ++article; }
         /* Walk to the next word. */
-        while(*article && !isLetter(*article)) { ++article; }
+        while (*article && !isLetter(*article)) { ++article; }
         /* Take care of 1 letter words. */
-        if(wordLen < 2) { continue; }
+        if (wordLen < 2) { continue; }
         /* Null-terminate the word. */
         *(nextWord+wordLen) = '\0';
         /* Search for the word in the indexed dictionary. */
-        if(!inDict(nextWord, indexedDict)) { 
+        if (!inDict(nextWord, indexedDict)) {
             /* Print the word if is not in the given dictionary. */
-            printf(nextWord);
+            printf("%s", nextWord);
             putchar('\n');
         }
     }
