@@ -1,0 +1,50 @@
+*******************************************************************
+     EE312 Fall 2013
+     GRADE REPORT FOR PROJECT 1
+*******************************************************************
+TEST:        Test0
+DESCRIPTION: Compile test
+RESULT:      PASSED
+*******************************************************************
+TEST:        Test1
+DESCRIPTION: Provided Test - Fruity
+WEIGHT:      0.4
+RESULT:      PASSED
+*******************************************************************
+TEST:        Test2
+DESCRIPTION: Provided Test - Dogs
+WEIGHT:      0.4
+RESULT:      PASSED
+*******************************************************************
+TEST:        Test3
+DESCRIPTION: Provided Test - Punctuation
+WEIGHT:      0.4
+RESULT:      PASSED
+*******************************************************************
+TEST:        Test4
+DESCRIPTION: Provided Test - General Test #1
+WEIGHT:      0.4
+RESULT:      PASSED
+*******************************************************************
+TEST:        Test5
+DESCRIPTION: Provided Test - General Test #2
+WEIGHT:      0.4
+RESULT:      PASSED
+*******************************************************************
+TEST:        Test6
+DESCRIPTION: So you thought you handled punctuation in the dictionary pretty well...
+WEIGHT:      0.67
+RESULT:      PASSED
+*******************************************************************
+TEST:        Test7
+DESCRIPTION: How well can you interpret the formatting of the article?
+WEIGHT:      0.67
+RESULT:      FAILED
+*******************************************************************
+TEST:        Test8
+DESCRIPTION: Tests common issues with projects
+WEIGHT:      0.66
+RESULT:      PASSED
+*******************************************************************
+TOTAL:       3.33
+*******************************************************************

@@ -1,0 +1,55 @@
+*******************************************************************
+     EE312 Fall 2013
+     GRADE REPORT FOR PROJECT 2
+*******************************************************************
+TEST:        Test0
+DESCRIPTION: Compile test
+RESULT:      PASSED
+*******************************************************************
+TEST:        Test1
+DESCRIPTION: Provided Test - testStage1
+WEIGHT:      0.4
+RESULT:      PASSED
+*******************************************************************
+TEST:        Test2
+DESCRIPTION: Provided Test - testStage2
+WEIGHT:      0.4
+RESULT:      PASSED
+*******************************************************************
+TEST:        Test3
+DESCRIPTION: Provided Test - testStage3
+WEIGHT:      0.4
+RESULT:      PASSED
+*******************************************************************
+TEST:        Test4
+DESCRIPTION: 1x1 multimulication matrix
+WEIGHT:      0.4
+RESULT:      PASSED
+*******************************************************************
+TEST:        Test5
+DESCRIPTION: 1xN,Nx1 matrix multiplication
+WEIGHT:      0.4
+RESULT:      PASSED
+*******************************************************************
+TEST:        Test6
+DESCRIPTION: NxM General Matrix multiplication
+WEIGHT:      0.5
+RESULT:      PASSED
+*******************************************************************
+TEST:        Test7
+DESCRIPTION: Multiplication chain, 2 matrices in list
+WEIGHT:      0.5
+RESULT:      PASSED
+*******************************************************************
+TEST:        Test8
+DESCRIPTION: Multiplication chain, >2 matrices in list
+WEIGHT:      0.5
+RESULT:      PASSED
+*******************************************************************
+TEST:        Test9
+DESCRIPTION: Random thorough matrix multiplication chain
+WEIGHT:      0.5
+RESULT:      PASSED
+*******************************************************************
+TOTAL:       4 (of 4)
+*******************************************************************
