@@ -47,8 +47,8 @@ void readInput(const char* file_name) {
 		} else if (StringIsEqualTo(&next_command, &quit)) {
 			all_done = true;
 		} else {
-			printf("Encountered an error in input file\n");
-			printf("The offending line has been ignored\n");
+			//printf("Encountered an error in input file\n");
+			//printf("The offending line has been ignored\n");
 		}
 		StringDestroy(&next_command);
 	} while (! all_done);
@@ -56,7 +56,7 @@ void readInput(const char* file_name) {
 	displayTailAndClose();
 }
 
-void main(void) {
+int main(void) {
 	/* we make four "constant" strings for the four comamnds */
 	inventory = StringCreate("Inventory");
 	purchase = StringCreate("Purchase");
@@ -65,8 +65,8 @@ void main(void) {
 	
 	readInput("test1.txt");
 	reset();
-	readInput("test2.txt");
-	reset();
+	//readInput("test2.txt");
+	//reset();
 	readInput("test3.txt");
 	reset();
 
@@ -79,13 +79,13 @@ void main(void) {
 	/* check the heap for memory leaks and other errors */
 	if (! isSaneHeap()) {
 		printf("oh goodness! you've corrupted the heap, naughty naughty\n");
-		return;
+		return -1;
 	}
 	if (! isEmptyHeap()) {
 		printf("Uh Oh! you have a memory leak somewhere, better find it\n");
-		return;
+		return -1;
 	}
-	
+	return 0;
 }
 
 void readNum(int* p) {
