@@ -134,16 +134,19 @@ void processPurchase() {
     readString(&customer_name);
     readString(&item);
     readNum(&count);
-    if (*((int*)((char*)&BabyStore + getCustomerData(item))) >= count) {
-        *((int*)((char*)&BabyStore + getCustomerData(item))) -= count;
-        updateCustomer(customer_name, item, count);
-    } else {
-        printf("Sorry ");
-        StringPrint(&customer_name);
-        printf(", we only have %d ",
-               *((int*)((char*)&BabyStore + getCustomerData(item))));
-        StringPrint(&item);
-        printf("\n");
+    /* Ensure a real item was asked for. */
+    if (getCustomerData(item) != -1) {
+        if (*((int*)((char*)&BabyStore + getCustomerData(item))) >= count) {
+            *((int*)((char*)&BabyStore + getCustomerData(item))) -= count;
+            updateCustomer(customer_name, item, count);
+        } else {
+            printf("Sorry ");
+            StringPrint(&customer_name);
+            printf(", we only have %d ",
+                   *((int*)((char*)&BabyStore + getCustomerData(item))));
+            StringPrint(&item);
+            printf("\n");
+        }
     }
     StringDestroy(&customer_name);
     StringDestroy(&item);
@@ -157,6 +160,9 @@ void processInventory() {
     int count;
     readString(&item);
     readNum(&count);
-    *((int*)((char*)&BabyStore + getCustomerData(item))) += count;
+    /* Ensure a real item was asked for. */
+    if (getCustomerData(item) != -1) {
+        *((int*)((char*)&BabyStore + getCustomerData(item))) += count;
+    }
     StringDestroy(&item);
 }
