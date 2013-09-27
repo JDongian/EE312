@@ -108,19 +108,19 @@ void processSummarize() {
         StringPrint(recordHolders[1]);
         printf(" has purchased the most diapers (%d)\n", records.diapers);
     } else {
-        printf("no one has purchased any diapers.\n");
+        printf("no one has purchased any diapers\n");
     }
     if (records.bottles != 0) {
         StringPrint(recordHolders[0]);
         printf(" has purchased the most bottles (%d)\n", records.bottles);
     } else {
-        printf("no one has purchased any bottles.\n");
+        printf("no one has purchased any bottles\n");
     }
     if (records.rattles != 0) {
         StringPrint(recordHolders[2]);
         printf(" has purchased the most rattles (%d)\n", records.rattles);
     } else {
-        printf("no one has purchased any rattles.\n");
+        printf("no one has purchased any rattles\n");
     }
 }
 
