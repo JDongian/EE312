@@ -64,11 +64,11 @@ void updateCustomer(String customer_name, String item, int count) {
 
 /* Clear the inventory and reset the customer database to empty */
 void reset(void) {
-    //Avoid freeing unallocated memory.
-    //StringDestroy(&(BabyStore.name));
+    /* Burn the warehouse down. */
     BabyStore.bottles = 0;
     BabyStore.diapers = 0;
     BabyStore.rattles = 0;
+    /* Wipe cusomer records. */
     for (int i = 0; i < num_customers; ++i) {
         StringDestroy(&(customers[i].name));
         customers[i].bottles = 0;
@@ -78,6 +78,9 @@ void reset(void) {
     num_customers = 0;
 }
 
+/* Print graded output.
+ * In the case of a tie for most purchased, pick the last customer.
+ */
 void processSummarize() {
     printf("There are %d diapers, %d bottles and %d rattles in inventory\n",
            BabyStore.diapers, BabyStore.bottles, BabyStore.rattles);
@@ -101,7 +104,6 @@ void processSummarize() {
             records.rattles = customers[i].rattles;
         }
     }
-    /* In the case of a tie, pick the first customer. */
     if (records.diapers != 0) {
         StringPrint(recordHolders[1]);
         printf(" has purchased the most diapers (%d)\n", records.diapers);
@@ -118,10 +120,13 @@ void processSummarize() {
         StringPrint(recordHolders[2]);
         printf(" has purchased the most rattles (%d)\n", records.rattles);
     } else {
-        printf("no one has purchased any rattles.");
+        printf("no one has purchased any rattles.\n");
     }
 }
 
+/* Remove items from inventory and add record of customer.
+ * Expects positive values. 
+ */
 void processPurchase() {
     String customer_name;
     String item;
