@@ -2,7 +2,8 @@
  * EE312 Simple CRM Project
  *
  * Joshua Dong
- * 
+ * Steven
+ * F 3-4 PM
  */
 
 #include <stdio.h>
@@ -134,6 +135,10 @@ void processPurchase() {
     readString(&customer_name);
     readString(&item);
     readNum(&count);
+    /* Ensure items were requested. */
+    if (count == 0) {
+        return;
+    }
     /* Ensure a real item was asked for. */
     if (getCustomerData(item) != -1) {
         if (*((int*)((char*)&BabyStore + getCustomerData(item))) >= count) {
