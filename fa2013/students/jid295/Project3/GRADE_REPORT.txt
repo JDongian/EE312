@@ -1,0 +1,45 @@
+*******************************************************************
+     EE312 Fall 2013
+     GRADE REPORT FOR PROJECT 3
+*******************************************************************
+TEST:        Test0
+DESCRIPTION: Compile test
+RESULT:      PASSED
+*******************************************************************
+TEST:        Test1
+DESCRIPTION: Provided Test - Test 1
+WEIGHT:      0.66
+RESULT:      PASSED
+*******************************************************************
+TEST:        Test2
+DESCRIPTION: Provided Test - Test 2
+WEIGHT:      0.67
+RESULT:      PASSED
+*******************************************************************
+TEST:        Test3
+DESCRIPTION: Provided Test - Test 3
+WEIGHT:      0.67
+RESULT:      PASSED
+*******************************************************************
+TEST:        Test4
+DESCRIPTION: Did you null terminate your strings? Naughty, naughty. Also tests for common mistakes (off by one, etc.) as well as formatting.
+WEIGHT:      0.2
+RESULT:      PASSED
+*******************************************************************
+TEST:        Test5
+DESCRIPTION: Tests your ability to handle a wide variety of inputs in many different orders
+WEIGHT:      0.6
+RESULT:      PASSED
+*******************************************************************
+TEST:        Test6
+DESCRIPTION: Do you REALLY know what makes a customer a customer?
+WEIGHT:      0.6
+RESULT:      FAILED
+*******************************************************************
+TEST:        Test7
+DESCRIPTION: Did you unnecessarily keep track of invalid customers (and therefore ran out of memory)?
+WEIGHT:      0.6
+RESULT:      PASSED
+*******************************************************************
+TOTAL:       3.4 (of 4)
+*******************************************************************
