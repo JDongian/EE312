@@ -102,31 +102,7 @@ double sqrtIt(double x, double low_guess, double high_guess) {
  * accuracy.
  */
 double sqrtRec(double x, double low_guess, double high_guess) {
-    double MIN_DOUBLE = 0.000000000000001;
-    /* Please no negative please please */
-    if (low_guess <= 0) {
-        low_guess = MIN_DOUBLE;
-    }
-    double mid_guess = (low_guess+high_guess)/2;
-    double mid_result = x/mid_guess;
-    /* If accuracy is good enough, return. */
-    if (mid_guess <= mid_result &&
-        mid_guess >= mid_result-MIN_DOUBLE) {
-        return mid_guess;
-    /* If mid_guess lowers the max bound and
-     * mid raises the min bound.
-     */
-    } else if (mid_result < mid_guess) {
-        printf("%f, %f:%f, %f:%f\n", x, low_guess, minimum, high_guess, maximum);
-        return sqrtRec(x, mid_result, mid_guess);
-    /* If mid_guess raises the min bound and
-     * mid lowers the max bound.
-     */
-    } else if (mid_result > mid_guess) {
-        printf("%f, %f:%f, %f:%f\n", x, low_guess, minimum, high_guess, maximum);
-        return sqrtRec(x, mid_guess, mid_result);
-    }
-    printf("Error.\n");
+    return 0;
 }
 
 
@@ -145,10 +121,7 @@ double sqrtRec(double x, double low_guess, double high_guess) {
  */
 
 int strCompare(char* str1, char* str2) {
-    if (*str1 * *str2 == 0) {
-        *str1 == *str2 ? return true : return false;
-    }
-    *str1 == *str2 ? return strCompare(str1+1, str2+1): return false;
+    return 0;
 }
 
 /*
@@ -174,17 +147,10 @@ int whatLetter(char c) {
  * once again, you can only use recursion, no loops
  */
 int strCompare2(char* str1, char* str2) {
-    if (*str1 * *str2 == 0) {
-        *str1 == *str2 ? return true : return false;
-    }
-    if (*str1 == *str2 &&
-        whatLetter(*str1) != -1) {
-            return false
-        }
-        return strCompare(str1+1, str2+1);
-    }
-    return false;
+    return 0;
 }
+
+
 
 /*
  * the two dimensional array maze[MATRIX_SIZE][MATRIX_SIZE] contains a maze
@@ -257,27 +223,27 @@ void printMaze(int maze[MATRIX_SIZE][MATRIX_SIZE]) {
 }
 
 int solveMazeRec(int row, int col) {
-    //maze[row][col] = 2;   
-    //if (row == MATRIX_SIZE) {
-    //    return 1;
-    //}
-    ///* ⇧ */
-    //if (isOK(row-1, col)) {
-    //    if 
-    //    return solveMazeRec(row-1, col);
-    //}
-    ///* ⇨ */
-    //if (isOK(row, col+1)) {
-    //    return solveMazeRec(row, col+1);
-    //}
-    ///* ⇩ */
-    //if (isOK(row+1, col)) {
-    //    return solveMazeRec(row+1, col);
-    //}
-    ///* ⇦ */
-    //if (isOK(row, col-1)) {
-    //    return solveMazeRec(row, col-1);
-    //}
+    maze[row][col] = 2;   
+    if (row == MATRIX_SIZE) {
+        return 1;
+    }
+    /* ⇧ */
+    if (isOK(row-1, col)) {
+        return solveMazeRec(row-1, col);
+    }
+    /* ⇨ */
+    if (isOK(row-1, col)) {
+        return solveMazeRec(row-1, col);
+    }
+    /* ⇩ */
+    if (isOK(row-1, col)) {
+        return solveMazeRec(row-1, col);
+    }
+    /* ⇦ */
+    if (isOK(row-1, col)) {
+        return solveMazeRec(row-1, col);
+    }
+    
     return 0;
 }
 
@@ -394,14 +360,14 @@ int turnLeft(int dir) {
  * You indicate "bread crumbs" by setting the square equal to "2"
  */
 void solveMazeIt(int row, int col) {
-   // int dir = 2; // 0 is up, 1 is right, 2 is down, 3 is left.
-   // maze[row][col] = 2; // drop a bread crumb in the starting square
-   // while (row < MATRIX_SIZE - 1) { // the exit is the only open square 
-   //     // in the last row
+    int dir = 2; // 0 is up, 1 is right, 2 is down, 3 is left.
+    maze[row][col] = 2; // drop a bread crumb in the starting square
+    while (row < MATRIX_SIZE - 1) { // the exit is the only open square 
+        // in the last row
 
-   //     /* the rest of this loop is yours */
+        /* the rest of this loop is yours */
 
-   // }
+    }
 }
 
 
@@ -424,68 +390,14 @@ struct Martian {
  * this optimal collection of coins.
  */
 Martian change(int cents) {
-    //Martian status;
-    ///* Trivial cases */
-    //if (cents%2 == 1 && cents < 15) {
-    //    return combination(-1, 0, 0);
-    //}
-    //if (cents >= dodeks) {
-    //    max_dodeks = cents/DODEK_VALUE;
-    //    /* If the value is expressible in purely dodeks */
-    //    if (cents == max_dodeks*DODEK_VALUE) {
-    //        return combination(0, 0, max_dodeks);
-    //    } else {
-    //        status = change(cents-max_dodeks*DODEK_VALUE);
-    //        if (status.pennies != -1) {
-    //            return status;
-    //        } else {
-    //            return change(cents-(max_dodeks-1)*DODEK_VALUE);
-    //        }
-    //    }
-    //} else if (cents >= nicks) {
-    //    max_nicks = cents/NICK_VALUE;
-    //    if (cents == max_nicks*NICK_VALUE) {
-    //        return combination(0, 0, max_nicks);
-    //    } else {
-    //        status = change(cents-max_nicks*NICK_VALUE);
-    //        if (status.pennies != -1) {
-    //            return status;
-    //        } else {
-    //            return change(cents-(max_nicks-1)*NICK_VALUE);
-    //        }
-    //    }
-    //} else if (cents >= dodeks) {
-    //    max_dodeks = cents/DODEK_VALUE;
-    //    if (cents == max_dodeks*DODEK_VALUE) {
-    //        return combination(0, 0, max_dodeks);
-    //    } else {
-    //        status = change(cents-max_dodeks*DODEK_VALUE);
-    //        if (status.pennies != -1) {
-    //            return status;
-    //        } else {
-    //            return change(cents-(max_dodeks-1)*DODEK_VALUE);
-    //        }
-    //    }
-    //}
-    //        
 }
 
 /* 
  * without using recursion, solve the Martian change problem described above.
  * NOTE: I don't have a solution to this, and I consider it to be "challenging"
- * (i.e, an exercise in futility). But, if you like banging your head against
- * the wall for zero credit, this is the problem for you!
+ * (i.e, an exercise in futility). But, if you like banging your head against the wall for zero credit
+ * this is the problem for you!
  */
 Martian changeIt(int cents) {
-    int dodeks = cents<0xa?0:(cents-10)/12+
-                           ((0x001110011100>>((11-((cents-10)%12))*4))&0xf);
-    int nicks = cents<0xa?(cents>4):
-                          (0x220003311144>>((11-((cents-10)%12))*4))&0xf;
-    int pennies = cents<0xa?cents%5:
-                            (0x010120101201>>((11-((cents-10)%12))*4))&0xf;
-    return {pennies, nicks, dodeks};
-    //int dodeks = cents<0xa?0:(0x36c>>11-(cents-10)%12)%2+(cents-10)/12;
-    //int pennies = cents<0xa?cents%5:(0x5ad>>(11-((cents-10)%12)))%2+
-    //              (0x84>>(11-((cents-10)%12)))%2;
 }
 
