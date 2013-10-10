@@ -1,0 +1,60 @@
+*******************************************************************
+     EE312 Fall 2013
+     GRADE REPORT FOR PROJECT 4
+*******************************************************************
+TEST:        Test0
+DESCRIPTION: Compile test
+RESULT:      FAILED
+*******************************************************************
+TEST:        Test01
+DESCRIPTION: Provided Tests for minRec1 and minRec2
+WEIGHT:      0.4
+RESULT:      FAILED
+*******************************************************************
+TEST:        Test02
+DESCRIPTION: Provided Tests for sqrtRec
+WEIGHT:      0.4
+RESULT:      FAILED
+*******************************************************************
+TEST:        Test03
+DESCRIPTION: Provided Tests for strCompare and strCompare2
+WEIGHT:      0.4
+RESULT:      FAILED
+*******************************************************************
+TEST:        Test04
+DESCRIPTION: Provided Tests for solveMazeRec
+WEIGHT:      0.4
+RESULT:      FAILED
+*******************************************************************
+TEST:        Test05
+DESCRIPTION: Provided Tests for coinCount
+WEIGHT:      0.4
+RESULT:      FAILED
+*******************************************************************
+TEST:        Test06
+DESCRIPTION: More in depth test of minRec1 and minRec2
+WEIGHT:      0.4
+RESULT:      FAILED
+*******************************************************************
+TEST:        Test07
+DESCRIPTION: More in depth test of sqrtRec
+WEIGHT:      0.4
+RESULT:      FAILED
+*******************************************************************
+TEST:        Test08
+DESCRIPTION: More in depth test of strCompare and strCompare2
+WEIGHT:      0.4
+RESULT:      FAILED
+*******************************************************************
+TEST:        Test09
+DESCRIPTION: More in depth test of solveMazeRec
+WEIGHT:      0.4
+RESULT:      FAILED
+*******************************************************************
+TEST:        Test10
+DESCRIPTION: More in depth test of coinCount
+WEIGHT:      0.4
+RESULT:      FAILED
+*******************************************************************
+TOTAL:       0 (of 4)
+*******************************************************************
