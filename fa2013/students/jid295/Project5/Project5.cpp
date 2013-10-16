@@ -61,15 +61,27 @@ void createCopySet(Set* self, const Set* other) {
 /* done for you already */
 void assignSet(Set* self, const Set* other) {
 	if (self == other) { return; }
-	
 	destroySet(self);
 	createCopySet(self, other);
 }
 
 /* return true if x is an element of self */
 bool isMemberSet(const Set* self, int x) {
+    int min=0, mid, max=self->len;
+    while (min < max) {
+        mid = (min+max)/2;
+        //assert(mid < max);
+        if (self->elements[mid] < x)
+            min = mid+1;
+        else
+            max = mid;
+    }
+    if ((max == min) && (self->elements[min] == x))
+        return true;
+    else
+        return false;
 }
-
+    
 /*
  * add x as a new member to this set. 
  * If x is already a member, then self should not be changed

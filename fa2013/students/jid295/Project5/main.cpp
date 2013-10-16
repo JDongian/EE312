@@ -16,7 +16,7 @@ void relationalTests(void);
 void algebraicTests(void);
 void testTime(void);
 
-void main (void) {
+int main (void) {
 	visualTests();
 	equalityTests();
 	specialCaseTests();
