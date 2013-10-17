@@ -31,41 +31,44 @@
 
 
 
-/* done for you already */
+/* Free the elements of the given set. */
 void destroySet(Set* self) {
-	free(self->elements);
+    free(self->elements);
 }
 
-/* done for you already */
+/* Set elements to the null pointer and len to 0. */
 void createEmptySet(Set* self) {
-	self->len = 0;
-	self->elements = 0;
+    self->len = 0;
+    self->elements = 0;
 }
 
-/* done for you already */
+/* Initialize a set to be filled with one element only. */
 void createSingletonSet(Set* self, int x) {
-	self->elements = (int*) malloc(sizeof(int));
-	self->elements[0] = x;
-	self->len = 1;
+    self->elements = (int*) malloc(sizeof(int));
+    self->elements[0] = x;
+    self->len = 1;
 }
 
-/* done for you already */
+/* Copy the elements from the second set to the first set.
+ * WARNING: Does no checking for capacity. */
 void createCopySet(Set* self, const Set* other) {
-	self->elements = (int*) malloc(other->len * sizeof(int));
-	for (int k = 0; k < other->len; k += 1) {
-		self->elements[k] = other->elements[k];
-	}
-	self->len = other->len;	
+    self->elements = (int*) malloc(other->len * sizeof(int));
+    for (int k = 0; k < other->len; k += 1) {
+        self->elements[k] = other->elements[k];
+    }
+    self->len = other->len;
 }
 
-/* done for you already */
+/* Deallocates the set and copies the second set to the first. */
 void assignSet(Set* self, const Set* other) {
-	if (self == other) { return; }
-	destroySet(self);
-	createCopySet(self, other);
+    if (self == other) { return; }
+    destroySet(self);
+    createCopySet(self, other);
 }
 
-/* return true if x is an element of self */
+/* Return true if x is an element of self.
+ * Otherwise, return false.
+ */
 bool isMemberSet(const Set* self, int x) {
     int min=0, mid, max=self->len;
     while (min < max) {
@@ -81,14 +84,54 @@ bool isMemberSet(const Set* self, int x) {
     else
         return false;
 }
-    
-/*
- * add x as a new member to this set. 
- * If x is already a member, then self should not be changed
- * Be sure to restore the design invariant property that elemnts[] remains sorted
- * (yes, you can assume it is sorted when the function is called, that's what an invariant is all about)
- */
+
+/* Add x as a new member to this set. */
 void insertSet(Set* self, int x) {
+    /* If x is already a member of the set,
+     * then self should not be changed. */
+    if (isMemberSet(self, x)) {
+        /* If there is no room left in the elements,
+         * allocate double the length.
+         */
+        if (self->len+1 >= self->capacity) {
+            self->capacity *= 2;
+            int* new_elements = malloc(sizeof(int)*capacity);
+            int j = 0;
+            for (int i = 0; i < (self->len)+1; ++i) {
+                if ((i == j) && (x < self->elements[j])) {
+                    new_elements[i] = x;
+                    ++i; ++j;
+                    continue;
+                }
+                new_elements[i] = self->elements[j];
+                ++j;
+            }
+            destroySet(self);
+            /* Set the pointer of the copied array to the current array. */
+            self->elements = new_elements;
+            ++(self->len);
+        } else {
+            int min=0, mid, max=self->len;
+            while (min < max) {
+                mid = (min+max)/2;
+                //assert(mid < max);
+                if (self->elements[mid] < x)
+                    min = mid+1;
+                else
+                    max = mid;
+            }
+            int temp;
+            int swap = self->elements[min];
+            self->elements[min] = x;
+            /* Shift the remaining elements down. */
+            while (int i = min+1; i < (self->len)+1; ++i) {
+                temp = self->elements[i];
+                self->elements[i] = swap;
+                swap = temp;
+            }
+            ++(self->len);
+        }
+    }
 }
 
 
@@ -108,22 +151,22 @@ void removeSet(Set* self, int x) {
 
 /* done for you already */
 void displaySet(const Set* self) {
-	int k;
-	
-	printf("{");
+    int k;
 
-	if (self->len == 0) { 
-		printf("}"); 
-	}
-	else {
-		for (k = 0; k < self->len; k += 1) {
-			if (k < self->len - 1) {
-				printf("%d,", self->elements[k]);
-			} else {
-				printf("%d}", self->elements[k]);
-			}
-		}
-	}
+    printf("{");
+
+    if (self->len == 0) { 
+        printf("}"); 
+    }
+    else {
+        for (k = 0; k < self->len; k += 1) {
+            if (k < self->len - 1) {
+                printf("%d,", self->elements[k]);
+            } else {
+                printf("%d}", self->elements[k]);
+            }
+        }
+    }
 }
 
 /* return true if self and other have exactly the same elements */
@@ -136,7 +179,7 @@ bool isSubsetOf(const Set* self, const Set* other) {
 
 /* done for you */
 bool isEmptySet(const Set* self) {
-	return self->len == 0;
+    return self->len == 0;
 }
 
 /* remove all elements from self that are not also elements of other */

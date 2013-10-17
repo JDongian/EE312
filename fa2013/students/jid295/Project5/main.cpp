@@ -420,11 +420,11 @@ typedef enum Scales {
 	SUPER_LINEAR
 } Scales;
 /* NOTE: the order of these strings MUST MATCH EXACTLY the order of the Scales enum */
-char* scaling_strings[] = {
-	"sub linear (YAHOO!)",
-	"linear",
-	"super linear, yuck."
-};
+
+const char* msg1 = "sub linear (YAHOO!)";
+const char* msg2 = "linear";
+const char* msg3 = "super linear, yuck.";
+char* scaling_strings[] ={(char*)msg1, (char*)msg2, (char*)msg3};
 
 int sizes[] = { 100, 400, 1600, 6400, 25600 };
 //const unsigned num_times = sizeof(sizes) / sizeof(int);
@@ -466,7 +466,7 @@ Scales determineScaling(Function fun) {
 
 void testTime(void) {
 	Scales behavior[NUM_TESTS];
-	int k;
+	unsigned int k;
 	int x;
 	for (k = 0; k < num_times; k += 1) {
 		printf("creating a random set with %d elements...", sizes[k]);
