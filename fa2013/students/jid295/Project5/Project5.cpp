@@ -13,14 +13,6 @@
 #include "Set.h"
 
 /*
- * Several of the required functions have been written already
- * You may use these functions as-is or you may modify them in any way. 
- * Please NOTE, you are responsible for ensuring that the functions work correctly in 
- * your project solution. Just because the function works correctly in my solution does 
- * NOT mean that the function will work correctly in yours. 
- */
-
-/*
  * Design NOTES:
  *
  * The design provided in this starter kit assumes
@@ -94,7 +86,7 @@ bool isMemberSet(const Set* self, int x) {
 
 /* Add x as a new member to this set. */
 void insertSet(Set* self, int x) {
-    printf("      Adding: %d into array of len: %d\n", x, self->len);
+    //printf("      Adding: %d into array of len: %d\n", x, self->len);
     if (self->len == 0) {
         createSingletonSet(self, x);
         self->capacity = 1;
@@ -109,7 +101,7 @@ void insertSet(Set* self, int x) {
          * allocate double the length.
          */
         if (self->len+1 >= self->capacity) {
-            printf("Extending...\n");
+            //printf("Extending...\n");
             self->capacity *= 2;
             int* new_elements = (int*) malloc(sizeof(int)*(self->capacity));
             int i = 0; //new_elements iterator
@@ -182,8 +174,8 @@ void insertSet(Set* self, int x) {
                 swap = temp;
             }
             ++(self->len);
-            printf("    Inserted: %d into %d.\n",
-                    x, min);
+            //printf("    Inserted: %d into %d.\n",
+             //       x, min);
         }
     }
 }
@@ -272,14 +264,15 @@ void intersectFromSet(Set* self, const Set* other) {
     }
 }
 
-/* remove all elements from self that are also elements of other */
+/* Remove all elements from self that are also elements of other */
 void subtractFromSet(Set* self, const Set* other) {
     for (int i = 0; i < other->len; ++i) {
         removeSet(self, other->elements[i]);
     }
 }
 
-/* add all elements of other to self (obviously, without creating duplicate elements) */
+/* Add all elements of other to self
+ * (obviously, without creating duplicate elements) */
 void unionInSet(Set* self, const Set* other) {
     for (int i = 0; i < other->len; ++i) {
         insertSet(self, other->elements[i]);
