@@ -118,6 +118,8 @@ void insertSet(Set* self, int x) {
                     ++i; ++j;
                 }
             }
+            printf("%d %d %d\n",
+                    self->capacity, self->len, (self->elements)[0]);
             destroySet(self);
             /* Set the pointer of the copied array to the current array. */
             self->elements = new_elements;
