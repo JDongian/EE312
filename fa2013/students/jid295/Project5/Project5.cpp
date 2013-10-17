@@ -70,6 +70,10 @@ void assignSet(Set* self, const Set* other) {
  * Otherwise, return false.
  */
 bool isMemberSet(const Set* self, int x) {
+    if (self->len == 0) {
+        //printf("  Empty set has nothing.\n");
+        return false;
+    }
     int min=0, mid, max=self->len;
     while (min < max) {
         mid = (min+max)/2;
@@ -79,37 +83,85 @@ bool isMemberSet(const Set* self, int x) {
         else
             max = mid;
     }
-    if ((max == min) && (self->elements[min] == x))
+    if ((max == min) && (self->elements[min] == x)) {
+        //printf("  Duplicate: %d.\n", x);
         return true;
-    else
+    } else {
+        //printf("  Not found: %d.\n", x);
         return false;
+    }
 }
 
 /* Add x as a new member to this set. */
 void insertSet(Set* self, int x) {
+    printf("      Adding: %d into array of len: %d\n", x, self->len);
+    if (self->len == 0) {
+        createSingletonSet(self, x);
+        self->capacity = 1;
+        printf("\tSingleton made with value: %d, len: %d, capacity: %d.\n",
+                self->elements[0], self->len, self->capacity);
+        return;
+    }
     /* If x is already a member of the set,
      * then self should not be changed. */
-    if (isMemberSet(self, x)) {
+    if (!isMemberSet(self, x)) {
         /* If there is no room left in the elements,
          * allocate double the length.
          */
         if (self->len+1 >= self->capacity) {
+            printf("Extending...\n");
             self->capacity *= 2;
-            int* new_elements = malloc(sizeof(int)*capacity);
-            int j = 0;
-            for (int i = 0; i < (self->len)+1; ++i) {
+            int* new_elements = (int*) malloc(sizeof(int)*(self->capacity));
+            int i = 0; //new_elements iterator
+            int j = 0; //self->elements iterator
+            /* Cleverly copy the elements */
+            while (i <= (self->len)) {
+                /* If we are at the end and we have not inserted x yet. */
+                if ((i == j) && (i == self->len-1)) {
+                    /* Copy the last element. */
+                    new_elements[i] = self->elements[j];
+                    /* Set the element after the last to x. */
+                    new_elements[self->len] = x;
+                    //Print array
+                    printf("  Appending to pos %d: [", i+1);
+                    for (int y = 0; y<(self->len)+1; ++y) {
+                        printf("%d, ", new_elements[y]);
+                    }   printf("]\n");
+                    break;
+                }
                 if ((i == j) && (x < self->elements[j])) {
                     new_elements[i] = x;
+                    new_elements[i+1] = self->elements[j];
+                    //Print array
+                    printf(" Special copy: [");
+                    for (int y = 0; y<self->len+1; ++y) {
+                        printf("%d, ", new_elements[y]);
+                    }   printf("]\n");
+                    /* Hop an extra time for the new element */
+                    i += 2; ++j;
+                    continue;
+                } else {
+                    new_elements[i] = self->elements[j];
+                    //Print array
+                    printf(" Copy: [");
+                    for (int y = 0; y<self->len+1; ++y) {
+                        printf("%d, ", new_elements[y]);
+                    }   printf("]\n");
+                    /* Iterate both arrays */
                     ++i; ++j;
                     continue;
                 }
-                new_elements[i] = self->elements[j];
-                ++j;
             }
             destroySet(self);
             /* Set the pointer of the copied array to the current array. */
             self->elements = new_elements;
             ++(self->len);
+            printf("  Current: [");
+            for (int y = 0; y<(self->len); ++y) {
+                printf("%d, ", new_elements[y]);
+            }   printf("]\n");
+            //    printf("\tSet extended to insert: %d, len: %d, capacity: %d.\n",
+         //           x, self->len, self->capacity);
         } else {
             int min=0, mid, max=self->len;
             while (min < max) {
@@ -124,12 +176,14 @@ void insertSet(Set* self, int x) {
             int swap = self->elements[min];
             self->elements[min] = x;
             /* Shift the remaining elements down. */
-            while (int i = min+1; i < (self->len)+1; ++i) {
+            for (int i = min+1; i < (self->len)+1; ++i) {
                 temp = self->elements[i];
                 self->elements[i] = swap;
                 swap = temp;
             }
             ++(self->len);
+            printf("    Inserted: %d into %d.\n",
+                    x, min);
         }
     }
 }
@@ -171,10 +225,12 @@ void displaySet(const Set* self) {
 
 /* return true if self and other have exactly the same elements */
 bool isEqualToSet(const Set* self, const Set* other) {
+    return false;
 }
 
 /* return true if every element of self is also an element of other */
 bool isSubsetOf(const Set* self, const Set* other) {
+    return false;
 }
 
 /* done for you */

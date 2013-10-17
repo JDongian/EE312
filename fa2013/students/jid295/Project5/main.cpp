@@ -28,7 +28,7 @@ int main (void) {
 
 void randomSet(Set* s) {
 	Set t;
-	int n = rand() % maximum_set_size + 1;
+	int n = 14;//rand() % maximum_set_size + 1;
 	int i;
 	
 	createEmptySet(&t);
@@ -426,7 +426,7 @@ const char* msg2 = "linear";
 const char* msg3 = "super linear, yuck.";
 char* scaling_strings[] ={(char*)msg1, (char*)msg2, (char*)msg3};
 
-int sizes[] = { 100, 400, 1600, 6400, 25600 };
+int sizes[] = { 20, 100, 1600, 6400, 25600 };
 //const unsigned num_times = sizeof(sizes) / sizeof(int);
 #define num_times (sizeof(sizes) / sizeof(int))
 Set setsA[num_times];
