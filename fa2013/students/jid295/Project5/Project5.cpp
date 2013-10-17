@@ -98,8 +98,8 @@ void insertSet(Set* self, int x) {
     if (self->len == 0) {
         createSingletonSet(self, x);
         self->capacity = 1;
-        printf("\tSingleton made with value: %d, len: %d, capacity: %d.\n",
-                self->elements[0], self->len, self->capacity);
+        //printf("\tSingleton made with value: %d, len: %d, capacity: %d.\n",
+        //        self->elements[0], self->len, self->capacity);
         return;
     }
     /* If x is already a member of the set,
@@ -123,30 +123,30 @@ void insertSet(Set* self, int x) {
                     /* Set the element after the last to x. */
                     new_elements[self->len] = x;
                     //Print array
-                    printf("  Appending to pos %d: [", i+1);
-                    for (int y = 0; y<(self->len)+1; ++y) {
-                        printf("%d, ", new_elements[y]);
-                    }   printf("]\n");
+                    //printf("  Appending to pos %d: [", i+1);
+                    //for (int y = 0; y<(self->len)+1; ++y) {
+                    //    printf("%d, ", new_elements[y]);
+                    //}   printf("]\n");
                     break;
                 }
                 if ((i == j) && (x < self->elements[j])) {
                     new_elements[i] = x;
                     new_elements[i+1] = self->elements[j];
                     //Print array
-                    printf(" Special copy: [");
-                    for (int y = 0; y<self->len+1; ++y) {
-                        printf("%d, ", new_elements[y]);
-                    }   printf("]\n");
+                    //printf(" Special copy: [");
+                    //for (int y = 0; y<self->len+1; ++y) {
+                    //    printf("%d, ", new_elements[y]);
+                    //}   printf("]\n");
                     /* Hop an extra time for the new element */
                     i += 2; ++j;
                     continue;
                 } else {
                     new_elements[i] = self->elements[j];
                     //Print array
-                    printf(" Copy: [");
-                    for (int y = 0; y<self->len+1; ++y) {
-                        printf("%d, ", new_elements[y]);
-                    }   printf("]\n");
+                    //printf(" Copy: [");
+                    //for (int y = 0; y<self->len+1; ++y) {
+                    //    printf("%d, ", new_elements[y]);
+                    //}   printf("]\n");
                     /* Iterate both arrays */
                     ++i; ++j;
                     continue;
@@ -156,10 +156,10 @@ void insertSet(Set* self, int x) {
             /* Set the pointer of the copied array to the current array. */
             self->elements = new_elements;
             ++(self->len);
-            printf("  Current: [");
-            for (int y = 0; y<(self->len); ++y) {
-                printf("%d, ", new_elements[y]);
-            }   printf("]\n");
+            //printf("  Current: [");
+            //for (int y = 0; y<(self->len); ++y) {
+            //    printf("%d, ", new_elements[y]);
+            //}   printf("]\n");
             //    printf("\tSet extended to insert: %d, len: %d, capacity: %d.\n",
          //           x, self->len, self->capacity);
         } else {
@@ -175,7 +175,7 @@ void insertSet(Set* self, int x) {
             int temp;
             int swap = self->elements[min];
             self->elements[min] = x;
-            /* Shift the remaining elements down. */
+            /* Rotate the remaining elements down. */
             for (int i = min+1; i < (self->len)+1; ++i) {
                 temp = self->elements[i];
                 self->elements[i] = swap;
@@ -189,30 +189,37 @@ void insertSet(Set* self, int x) {
 }
 
 
-/*
- * don't forget: it is OK to try to remove an element
- * that is NOT in the set.  
- * If 'x' is not in the set 'self', then
- * removeSet should do nothing (it's not an error)
- * Otherwise, ('x' IS in the set), remove x. Be sure to update self->length
- * It is not necessary (nor recommended) to call malloc -- if removing an element means the 
- * array on the heap is "too big", that's almost certainly OK, and reallocating a smaller array 
- * is almost definitely NOT worth the trouble
- */
+/* */
 void removeSet(Set* self, int x) {
-
+    if (self->len == 0) {
+        return;
+    }
+    int min=0, mid, max=self->len;
+    while (min < max) {
+        mid = (min+max)/2;
+        //assert(mid < max);
+        if (self->elements[mid] < x)
+            min = mid+1;
+        else
+            max = mid;
+    }
+    /* If the value was in the array, */
+    if ((max == min) && (self->elements[min] == x)) {
+        /* Rotate the elements down. */
+        for (int i = min; i < (self->len)-1; ++i) {
+            self->elements[i] = self->elements[i+1];
+        }
+        --(self->len);
+    }
 }
 
 /* done for you already */
 void displaySet(const Set* self) {
     int k;
-
     printf("{");
-
     if (self->len == 0) { 
         printf("}"); 
-    }
-    else {
+    } else {
         for (k = 0; k < self->len; k += 1) {
             if (k < self->len - 1) {
                 printf("%d,", self->elements[k]);
@@ -223,29 +230,58 @@ void displaySet(const Set* self) {
     }
 }
 
-/* return true if self and other have exactly the same elements */
+/* Return true if self and other have exactly the same elements.
+ * Complexity: O(n)
+ */
 bool isEqualToSet(const Set* self, const Set* other) {
-    return false;
+    if (self->len != other->len){ return false; }
+    for (int i = 0; i < self->len; ++i) {
+        if (self->elements[i] != other->elements[i]){
+            return false;
+        }
+    }
+    return true;
 }
 
-/* return true if every element of self is also an element of other */
+/* Return true if every element of self is also an element of other
+ * Complexity: O(n)
+ */
 bool isSubsetOf(const Set* self, const Set* other) {
-    return false;
+    if (self->len > other->len){ return false; }
+    for (int i = 0; i < self->len; ++i) {
+        if (isMemberSet(other, self->elements[i])) {
+            return false;
+        }
+    }
+    return true;
 }
 
-/* done for you */
+/* Check if the set is empty.
+ * Complexity: O(1)
+ */
 bool isEmptySet(const Set* self) {
     return self->len == 0;
 }
 
-/* remove all elements from self that are not also elements of other */
+/* Remove all elements from self that are not also elements of other */
 void intersectFromSet(Set* self, const Set* other) {
+    for (int i = 0; i < other->len; ++i) {
+        if (!isMemberSet(self, other->elements[i])) {
+            removeSet(self, other->elements[i]);
+        }
+    }
 }
 
 /* remove all elements from self that are also elements of other */
 void subtractFromSet(Set* self, const Set* other) {
+    for (int i = 0; i < other->len; ++i) {
+        removeSet(self, other->elements[i]);
+    }
 }
 
 /* add all elements of other to self (obviously, without creating duplicate elements) */
 void unionInSet(Set* self, const Set* other) {
+    for (int i = 0; i < other->len; ++i) {
+        insertSet(self, other->elements[i]);
+    }
 }
