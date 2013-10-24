@@ -51,6 +51,7 @@ void createCopySet(Set* self, const Set* other) {
         self->elements[k] = other->elements[k];
     }
     self->len = other->len;
+    self->capacity = other->capacity;
 }
 
 /* Deallocates the set and copies the second set to the first. */
@@ -98,6 +99,17 @@ void insertSet(Set* self, int x) {
             int j = 0; //self->elements iterator
             /* Cleverly copy the elements */
             while (i <= (self->len)) {
+                if ((i == j) && (self->len == 1) && (i == 0)) {
+                    if (x < self->elements[j]) {
+                        new_elements[i] = x;
+                        new_elements[i+1] = self->elements[j];
+                        i += 2; ++j;
+                    } else {
+                        new_elements[i] = self->elements[j];
+                        ++i; ++j;
+                    }
+                    continue;
+                }
                 /* If we are at the end and we have not inserted x yet. */
                 if ((i == j) && (i == self->len-1)) {
                     /* Copy the last element. */
