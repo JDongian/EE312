@@ -61,19 +61,18 @@ void render_text(int x, int y, SDL_Surface *surface,
     char* begin = buff;
     while (buff[i]) {
         if (buff[i] == '\n') {
-            buff[i] = '\0';
+            buff[i++] = '\0';
             apply_surface(x, y + line++*lineskip,
                           TTF_RenderText_Blended(font, begin, c),
                           surface);         
-            while(buff[i] == '\n' ||
-                  buff[i] == '\0') {
+            while(buff[i] == '\n') {
                 ++i;
             }
             begin = buff+i;
         }
         ++i;
     }
-    apply_surface(x, y + line*lineskip,
+    apply_surface(x, y + line++*lineskip,
                   TTF_RenderText_Blended(font, begin, c),
                   surface);
 }
@@ -209,7 +208,7 @@ int main(int argc, char* args[]) {
     bool cap = true;
     char run_stats[64];
     char world_stats[256];
-    unsigned int FRAMES_PER_SECOND = 60;
+    unsigned int FPS_CAP = 60;
     double measured_fps = 0;
 
     /* Seed random to time. */
@@ -298,8 +297,11 @@ int main(int argc, char* args[]) {
                     case SDLK_RETURN:
                         tick_once = 1;
                         if(keystates[SDLK_LSHIFT] ||
-                                keystates[SDLK_RSHIFT]) {
+                           keystates[SDLK_RSHIFT]) {
                             tick_once = 1000;
+                        } else if(keystates[SDLK_LCTRL] ||
+                                  keystates[SDLK_RCTRL]) {
+                            tick_once = 100000;
                         }
                         break;
                     /* Hotkey: 'q' to quit. */
@@ -326,24 +328,35 @@ int main(int argc, char* args[]) {
                      SDL_MapRGB(screen->format, 0x77, 0x77, 0x77));
         if (running) {
             tick(step_size);
-        } else if (tick_once) {
+        } else if (tick_once > 0) {
             tick(tick_once);
-            tick_once = 0;
+            tick_once = -1;
         }
         if (running || tick_once) {
             render_world(world, screen, fullscreen, zoom_level);
             /* Render running statistics at the bottom. */
             sprintf(run_stats, "FPS: %d, STEP: %d",
                     (int)measured_fps, step_size);
-            render_text(WORLD_SIZE*zoom_level/2, WORLD_SIZE*zoom_level+3, screen,
-                        font, run_stats, {0x00, 0x00, 0x00});
+            render_text((fullscreen ?
+                            SCREEN_WIDTH/2 :
+                            WORLD_SIZE*zoom_level/2),
+                        (fullscreen ?
+                            WORLD_SIZE*(SCREEN_HEIGHT/WORLD_SIZE)+16 :
+                            WORLD_SIZE*zoom_level+3),
+                        screen, font, run_stats, {0x00, 0x00, 0x00});
             sprintf(world_stats, "Time: %d\n"
                                  "Pop: %d\n"
                                  "Average age: %d\n"
                                  "Average generation: %d",
                     time_step, (int)bug_list.size(),
                     average_age, average_generation);
-            render_text(6, WORLD_SIZE*zoom_level+3, screen,
+            render_text((fullscreen ?
+                            (SCREEN_WIDTH-
+                             WORLD_SIZE*(SCREEN_HEIGHT/WORLD_SIZE))/2 + 6:
+                            6),
+                        (fullscreen ?
+                            WORLD_SIZE*(SCREEN_HEIGHT/WORLD_SIZE)+16 :
+                            WORLD_SIZE*zoom_level+3), screen,
                         font, world_stats, {0x00, 0x00, 0x00});
             if (SDL_Flip(screen) == -1) {
                 printf("Failed switching buffers. Aborting.");
@@ -351,8 +364,8 @@ int main(int argc, char* args[]) {
             }
         }
         /* Frame rate limit */
-        if((cap == true) && (SDL_GetTicks()-t_prev < 1000/FRAMES_PER_SECOND)) {
-            SDL_Delay((1000/FRAMES_PER_SECOND) - (SDL_GetTicks()-t_prev));
+        if((cap == true) && (SDL_GetTicks()-t_prev < 1000/FPS_CAP)) {
+            SDL_Delay((1000/FPS_CAP) - (SDL_GetTicks()-t_prev));
         }
         measured_fps = 1000./(SDL_GetTicks()-t_prev);
     }
