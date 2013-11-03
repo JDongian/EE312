@@ -1,4 +1,5 @@
 #include "Bugs.h"
+#include "stdlib.h"
 
 int time_step = 0;
 int average_age = 0;
@@ -15,56 +16,56 @@ int total_back = 0;
 /* DONE: you don't need to use this function in your solution
  * however this function is used by createWorld to generate random bugs */
 Bug createBug(int x, int y) {
-	Bug b;
-	b.age = 0;
-	b.generation = 0;
-	b.x = x;
-	b.y = y;
-	b.dir = rand() % 8;
-	b.health = START_HEALTH;
-	for (int k = 0; k < 8; k += 1) {
-		if (DISTRIBUTED_GENES) {
-			b.genes[k] = GENE_TOTAL / 8;
-		} else {
-			if (k == 0) {
-				b.genes[k] = GENE_TOTAL;
-			} else {
-				b.genes[k] = 0;
-			}
-		}
-	}
-	total_straight += b.genes[0];
-	total_right += b.genes[1] + b.genes[2] + b.genes[3];
-	total_left += b.genes[5] + b.genes[6] + b.genes[7];
-	total_back += b.genes[4];
-	return b;
+    Bug b;
+    b.age = 0;
+    b.generation = 0;
+    b.x = x;
+    b.y = y;
+    b.dir = rand() % 8;
+    b.health = START_HEALTH;
+    for (int k = 0; k < 8; k += 1) {
+        if (DISTRIBUTED_GENES) {
+            b.genes[k] = GENE_TOTAL / 8;
+        } else {
+            if (k == 0) {
+                b.genes[k] = GENE_TOTAL;
+            } else {
+                b.genes[k] = 0;
+            }
+        }
+    }
+    total_straight += b.genes[0];
+    total_right += b.genes[1] + b.genes[2] + b.genes[3];
+    total_left += b.genes[5] + b.genes[6] + b.genes[7];
+    total_back += b.genes[4];
+    return b;
 }
 
 /* DONE: */
 void createWorld(void) {
-	/* empty the world */
-	for (int i = 0; i < WORLD_SIZE; i += 1) {
-		for (int j = 0; j < WORLD_SIZE; j += 1) {
-			world[i][j] = EMPTY;
-		}
-	}
+    /* empty the world */
+    for (int i = 0; i < WORLD_SIZE; i += 1) {
+        for (int j = 0; j < WORLD_SIZE; j += 1) {
+            world[i][j] = EMPTY;
+        }
+    }
 
-	/* create food */
-	for (int k = 0; k < INITIAL_FOOD; k += 1) {
-		int x = rand() % WORLD_SIZE;
-		int y = rand() % WORLD_SIZE;
-		world[x][y] = FOOD;
-	}
-	
-	/* create bugs */
-	while (bug_list.size() < INITIAL_BUGS) {
-		int x = rand() % WORLD_SIZE;
-		int y = rand() % WORLD_SIZE;
-		if (world[x][y] == EMPTY) {
-			world[x][y] = bug_list.size();
-			bug_list.push_back(createBug(x, y));
-		}
-	}	
+    /* create food */
+    for (int k = 0; k < INITIAL_FOOD; k += 1) {
+        int x = rand() % WORLD_SIZE;
+        int y = rand() % WORLD_SIZE;
+        world[x][y] = FOOD;
+    }
+
+    /* create bugs */
+    while (bug_list.size() < (unsigned int) INITIAL_BUGS) {
+        int x = rand() % WORLD_SIZE;
+        int y = rand() % WORLD_SIZE;
+        if (world[x][y] == EMPTY) {
+            world[x][y] = bug_list.size();
+            bug_list.push_back(createBug(x, y));
+        }
+    }	
 }
 
 /*
@@ -73,50 +74,50 @@ void createWorld(void) {
  * well, if you really want to get topographical, our bugs live on a donut.
  */ 
 int wrap(int y) {
-	if (y < 0) { return WORLD_SIZE - 1; }
-	else if (y == WORLD_SIZE) { return 0; }
-	else { return y; }
+    if (y < 0) { return WORLD_SIZE - 1; }
+    else if (y == WORLD_SIZE) { return 0; }
+    else { return y; }
 }
 
 /* DONE: you can use this function if you want, it's not required that you use it */
 int newX(int x, int dir) {
-	switch (dir) {
-		case 0: // move up
-		case 1:
-		case 7:
-			return wrap(x - 1);
-			break; // not reached
-		case 3: // move down
-		case 4:
-		case 5:
-			return wrap(x + 1);
-			break; // not reached
-		case 2: // move left or right
-		case 6:
-			return x;
-	}
-	/* NOT REACHED */
-	return 0;
+    switch (dir) {
+        case 0: // move up
+        case 1:
+        case 7:
+            return wrap(x - 1);
+            break; // not reached
+        case 3: // move down
+        case 4:
+        case 5:
+            return wrap(x + 1);
+            break; // not reached
+        case 2: // move left or right
+        case 6:
+            return x;
+    }
+    /* NOT REACHED */
+    return 0;
 }
 
 
 /* DONE: you can use this function if you want, it's not required that you use it */
 int newY(int y, int dir) {
-	switch (dir) {
-	case 1:
-	case 2:
-	case 3:
-		return wrap(y + 1);
-	case 5:
-	case 6:
-	case 7:
-		return wrap(y - 1);
-	case 0:
-	case 4:
-		return y;
-	}
-	/* NOT REACHED */
-	return 0;
+    switch (dir) {
+        case 1:
+        case 2:
+        case 3:
+            return wrap(y + 1);
+        case 5:
+        case 6:
+        case 7:
+            return wrap(y - 1);
+        case 0:
+        case 4:
+            return y;
+    }
+    /* NOT REACHED */
+    return 0;
 }
 
 
@@ -125,22 +126,34 @@ int newY(int y, int dir) {
  * if you drop food on a bug, be sure to feed the bug
  */
 void addFood(void) {
-	for (int food = 0; food < NUM_FOOD; food += 1) {
-		int x = rand() % WORLD_SIZE;
-		int y = rand() % WORLD_SIZE;
-		switch (world[x][y]) {
-		case EMPTY: // empty, add the food
-			world[x][y] = FOOD;
-			break;
-		case FOOD: // already has food, do nothing
-			break;
-		default: // bug, feed the bug
-			bug_list[world[x][y]].health += EAT_HEALTH;
-		}
-	}	
-	
+    for (int food = 0; food < NUM_FOOD; food += 1) {
+        int x = rand() % WORLD_SIZE;
+        int y = rand() % WORLD_SIZE;
+        switch (world[x][y]) {
+            case EMPTY: // empty, add the food
+                world[x][y] = FOOD;
+                break;
+            case FOOD: // already has food, do nothing
+                break;
+            default: // bug, feed the bug
+                bug_list[world[x][y]].health += EAT_HEALTH;
+        }
+    }	
+
 }
 
+int chooseDir(int genes[8]) {
+    /* Roulette selection */
+    int choice = rand() % GENE_TOTAL;
+    int cum_sum = 0;
+    for (int i = 0; i < 8; ++i) {
+        cum_sum += genes[i];
+        if (choice <= cum_sum) {
+            return i;
+        }
+    }
+    return -1;
+}
 /* TODO... finish this function as described below
  * move bugs 
  * if they move onto food, feed them
@@ -161,60 +174,76 @@ void addFood(void) {
  * there.
  */
 void moveBugs(void) {
-	int total_age = 0;
-	int total_gen = 0;
-	
-	/* update each bug in turn (but don't kill them) */
-	for (int k = 0; k < bug_list.size(); k += 1) {
+    int total_age = 0;
+    int total_gen = 0;
 
-		/* TODO: Move bug k one step foward in its current direction */
-
-		/* TODO: see if we stepped on food! */
-
-		/* TODO: update the world: NOTE: we may put this bug on top of another one
-		 * but that is OK, as long as the other one is in the bug list */
-
-		/* TODO: update this bug's health due to movement cost */		
-		
-		/* TODO: pick a new direction for the bug, based on its genes */
-
-		/* DONE: update this bug's age for statistics */
-		bug_list[k].age += 1;
-		total_age += bug_list[k].age;
-		total_gen += bug_list[k].generation;
-	}
-
-	/* DONE: some statistics... */
-	average_age = total_age / bug_list.size();
-	average_generation = total_gen / bug_list.size();
+    /* update each bug in turn (but don't kill them) */
+    for (unsigned int k = 0; k < bug_list.size(); k += 1) {
+        /* Clear the current square.
+         * TODO: make it so that if a previous bug landed on this square,
+         * don't clear.
+         */
+        world[bug_list[k].x][bug_list[k].y] = EMPTY;
+        /* Update bug position. */
+        bug_list[k].x = newX(bug_list[k].x, bug_list[k].dir);
+        bug_list[k].y = newY(bug_list[k].y, bug_list[k].dir);
+        /* Bug eating behavior. */
+        if (world[bug_list[k].x][bug_list[k].y] == FOOD) {
+            bug_list[k].health += EAT_HEALTH;
+        }
+        /* Put the bug in the new spot. */
+        world[bug_list[k].x][bug_list[k].y] = k;
+        /* Bug movement health cost. */
+        bug_list[k].health -= MOVE_HEALTH;
+        bug_list[k].dir = chooseDir(bug_list[k].genes);
+        bug_list[k].age += 1;
+        total_age += bug_list[k].age;
+        total_gen += bug_list[k].generation;
+    }
+    average_age = total_age / bug_list.size();
+    average_generation = total_gen / bug_list.size();
 }
 
-/* TODO: write this function 
- * look through the bug_list for dead bugs (bugs with zero 
- * health) and kill them
- *
- * To kill a bug, mark it's position in the world as EMPTY
- * then remove it from the bug_list.
- *
- * To remove a bug from the bug_list, use the following simple
- * trick.  Swap the bug with the last bug in the list, then
- * do "pop_back" on the bug_list vector.
- * Hey, since we're going to do pop_back anyway, we don't really
- * need to swap with the last bug.  We just need to copy the 
- * last bug into our position.
- *
- * WATCH OUT: there's a trap.  Be careful to account for the possibility
- * that the "last bug" is also dead.  Don't miss out on killing it
- * because you moved that bug forward in the bug_list
- *
- * Be sure to update the global statistics (total_straight, total_right, total_left and total_back)
- * for each bug that you kill.
- */
+void updateStatistics(int genes[]) {
+    total_straight -= genes[0];
+    total_right -= genes[1]+genes[2]+genes[3];
+    total_left -= genes[5]+genes[6]+genes[7];
+    total_back -= genes[4];
+}
+
 void killDeadBugs(void) {
+    unsigned int i = 0;
+    while (i < bug_list.size()) {
+        if (bug_list[i].health <= 0) {
+            /* Clear the square the bug occupied in the world.
+             * NOTE: If a previous bug was there,
+             * the square will still be cleared.
+             */
+            updateStatistics(bug_list[i].genes);
+            world[bug_list[i].x][bug_list[i].y] = EMPTY;
+            bug_list[i] = bug_list.back();
+            bug_list.pop_back();
+        } else {
+            ++i;
+        }
+    }
 }
 
-/* TODO: Finish this function 
- * Look at all the bugs in the bug_list.  For each bug
+void mutateGenes(int target[], int child[]) {
+    for (int i = 0; i < 8; ++i) {
+        target[i] = child[i];
+    }
+    int choice = rand() % 8;
+    /* Not equally random, but it's okay for now. */
+    while (target[choice] <= 0) {
+        choice = (choice+1) % 8;
+    }
+    --target[choice];
+    choice = rand() % 8;
+    ++target[choice];
+}
+
+/* Look at all the bugs in the bug_list.  For each bug
  * that has enough health to reproduce, reproduce a new bug.
  * Put the new bug in the same square and have it head in the
  * same direction.
@@ -233,36 +262,41 @@ void killDeadBugs(void) {
  * the world, since you have two bugs in the same square anyway).
  */
 void reproduceBugs(void) {
-	int num_bugs = bug_list.size();
-	for (int k = 0; k < num_bugs; k += 1) {
-		if (bug_list[k].health > REPRODUCE_HEALTH) {
-			/* TODO: make "b" a copy of ourself, but with a generation count 1 greater than our own */
-			Bug b; 
+    int num_bugs = bug_list.size();
+    for (int k = 0; k < num_bugs; k += 1) {
+        if (bug_list[k].health > REPRODUCE_HEALTH) {
+            /* Make the new bug. */
+            Bug b; 
+            b.x = bug_list[k].x;
+            b.y = bug_list[k].y;
+            b.dir = bug_list[k].dir;
+            b.health = bug_list[k].health/2;
+            b.generation = bug_list[k].generation+1;
+            b.age = 0;
+            mutateGenes(b.genes, bug_list[k].genes);
 
-			/* TODO: reduce our health by half and assign b half our health */
+            bug_list[k].health /= 2;
 
-			/* TODO: mutate Bug b's genes based on the instructions in the handout */
-			
-			/* DONE: update global statistics based on the new genes in b */
-			total_straight += b.genes[0];
-			total_right += b.genes[1] + b.genes[2] + b.genes[3];
-			total_left += b.genes[5] + b.genes[6] + b.genes[7];
-			total_back += b.genes[4];
+            /* Update global statistics based on the new genes in b */
+            total_straight += b.genes[0];
+            total_right += b.genes[1]+b.genes[2]+b.genes[3];
+            total_left += b.genes[5]+b.genes[6]+b.genes[7];
+            total_back += b.genes[4];
 
-			/* DONE: add b to the global bug list */
-			bug_list.push_back(b);
-		}
-	}	
+            /* Add b to the end of the global bug list */
+            bug_list.push_back(b);
+        }
+    }	
 }
 
 void timeStep() {
-	time_step += 1;
-	addFood();
-	moveBugs();
-	killDeadBugs();
-	reproduceBugs();
-	percent_straight = 100 * total_straight / bug_list.size() / GENE_TOTAL;
-	percent_left = 100 * total_left / bug_list.size() / GENE_TOTAL;
-	percent_right = 100 * total_right / bug_list.size() / GENE_TOTAL;
-	percent_back = 100 * total_back / bug_list.size() / GENE_TOTAL;
+    time_step += 1;
+    addFood();
+    moveBugs();
+    killDeadBugs();
+    reproduceBugs();
+    percent_straight = 100 * total_straight / bug_list.size() / GENE_TOTAL;
+    percent_left = 100 * total_left / bug_list.size() / GENE_TOTAL;
+    percent_right = 100 * total_right / bug_list.size() / GENE_TOTAL;
+    percent_back = 100 * total_back / bug_list.size() / GENE_TOTAL;
 }	
