@@ -301,7 +301,24 @@ int main(int argc, char* args[]) {
                             tick_once = 1000;
                         } else if(keystates[SDLK_LCTRL] ||
                                   keystates[SDLK_RCTRL]) {
-                            tick_once = 100000;
+                            tick_once = 10000;
+                        }
+                        break;
+                    /* Hotkey: <CTRL>+'s' to save (print) genes. */
+                    case SDLK_s:
+                        if(keystates[SDLK_LCTRL] ||
+                           keystates[SDLK_RCTRL]) {
+                            for (int j = bug_list.size(); j > 0; --j) {
+                                printf("%d %d %d %d %d %d %d %d\n",
+                                        bug_list[j].genes[0],  
+                                        bug_list[j].genes[1],  
+                                        bug_list[j].genes[2],  
+                                        bug_list[j].genes[3],  
+                                        bug_list[j].genes[4],  
+                                        bug_list[j].genes[5],  
+                                        bug_list[j].genes[6],  
+                                        bug_list[j].genes[7]);
+                            }
                         }
                         break;
                     /* Hotkey: 'q' to quit. */

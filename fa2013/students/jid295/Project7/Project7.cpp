@@ -178,12 +178,12 @@ void moveBugs(void) {
     int total_gen = 0;
 
     /* update each bug in turn (but don't kill them) */
-    for (unsigned int k = 0; k < bug_list.size(); k += 1) {
-        /* Clear the current square.
-         * TODO: make it so that if a previous bug landed on this square,
-         * don't clear.
+    for (int k = 0; k < bug_list.size(); ++k) {
+        /* Clear the current square if we are the only one here.
          */
-        world[bug_list[k].x][bug_list[k].y] = EMPTY;
+        if (world[bug_list[k].x][bug_list[k].y] ==  k) {
+            world[bug_list[k].x][bug_list[k].y] = EMPTY;
+        }
         /* Update bug position. */
         bug_list[k].x = newX(bug_list[k].x, bug_list[k].dir);
         bug_list[k].y = newY(bug_list[k].y, bug_list[k].dir);
@@ -195,8 +195,11 @@ void moveBugs(void) {
         world[bug_list[k].x][bug_list[k].y] = k;
         /* Bug movement health cost. */
         bug_list[k].health -= MOVE_HEALTH;
-        bug_list[k].dir = chooseDir(bug_list[k].genes);
+        /* Bug turn based on genes. */
+        bug_list[k].dir = (bug_list[k].dir+chooseDir(bug_list[k].genes))%8;
+        /* Bug statistics. */
         bug_list[k].age += 1;
+
         total_age += bug_list[k].age;
         total_gen += bug_list[k].generation;
     }
@@ -212,35 +215,61 @@ void updateStatistics(int genes[]) {
 }
 
 void killDeadBugs(void) {
-    unsigned int i = 0;
-    while (i < bug_list.size()) {
+    int i = bug_list.size()-1;
+    /* Negative health kills bugs. */
+    while (i >= 0) {
         if (bug_list[i].health <= 0) {
-            /* Clear the square the bug occupied in the world.
-             * NOTE: If a previous bug was there,
-             * the square will still be cleared.
+            /* Clear the square the bug occupied in the world if we are
+             * the only one there.
              */
             updateStatistics(bug_list[i].genes);
-            world[bug_list[i].x][bug_list[i].y] = EMPTY;
+            if(world[bug_list[i].x][bug_list[i].y] == i) {
+                world[bug_list[i].x][bug_list[i].y] = EMPTY;
+            }
             bug_list[i] = bug_list.back();
+            if (i != bug_list.size() -1) {
+                world[bug_list.back().x][bug_list.back().y] = i;
+            }
             bug_list.pop_back();
         } else {
-            ++i;
+            --i;
         }
     }
 }
 
-void mutateGenes(int target[], int child[]) {
+void mutateGenes2(int child[], int parent[]) {
+    int non_zero_genes = 0;
+    int choice = rand() % 8;
     for (int i = 0; i < 8; ++i) {
-        target[i] = child[i];
+        if((child[i] = parent[i])) {
+            ++non_zero_genes;
+        }
+    }
+    ++child[choice];
+    choice = rand() % non_zero_genes;
+    int i = 0;
+    /* Select gene to decrement with equal chances. */
+    while (non_zero_genes > 0 ||
+           parent[i] == 0) {
+        if (parent[i++]) {
+            --non_zero_genes;
+        }
+    }
+    --child[i];
+}
+
+void mutateGenes(int child[], int parent[]) {
+    for (int i = 0; i < 8; ++i) {
+        child[i] = parent[i];
     }
     int choice = rand() % 8;
     /* Not equally random, but it's okay for now. */
-    while (target[choice] <= 0) {
+    while (child[choice] <= 0) {
         choice = (choice+1) % 8;
     }
-    --target[choice];
+    --child[choice];
     choice = rand() % 8;
-    ++target[choice];
+    ++child[choice];
 }
 
 /* Look at all the bugs in the bug_list.  For each bug
