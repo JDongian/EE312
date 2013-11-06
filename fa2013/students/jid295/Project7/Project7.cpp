@@ -1,5 +1,8 @@
+#include <stdio.h>
 #include "Bugs.h"
 #include "stdlib.h"
+
+#define GENE_COUNT 8
 
 int time_step = 0;
 int average_age = 0;
@@ -237,39 +240,27 @@ void killDeadBugs(void) {
     }
 }
 
-void mutateGenes2(int child[], int parent[]) {
-    int non_zero_genes = 0;
-    int choice = rand() % 8;
-    for (int i = 0; i < 8; ++i) {
-        if((child[i] = parent[i])) {
-            ++non_zero_genes;
-        }
-    }
-    ++child[choice];
-    choice = rand() % non_zero_genes;
+void mutateGenes(int genes[GENE_COUNT]) {
     int i = 0;
-    /* Select gene to decrement with equal chances. */
-    while (non_zero_genes > 0 ||
-           parent[i] == 0) {
-        if (parent[i++]) {
-            --non_zero_genes;
+    int choice = 0;
+    /* Check non-zero genes. */
+    for (i = 0; i < 8; ++i) {
+        if (genes[i]) {
+            ++choice;
         }
     }
-    --child[i];
-}
-
-void mutateGenes(int child[], int parent[]) {
-    for (int i = 0; i < 8; ++i) {
-        child[i] = parent[i];
+    /* Decrement random gene with equal chances. */
+    i = 0;
+    choice = rand() % choice;
+    while (choice > 0 || genes[i] == 0) {
+        if (genes[i] != 0) {
+            --choice;
+        }
+        ++i;
     }
-    int choice = rand() % 8;
-    /* Not equally random, but it's okay for now. */
-    while (child[choice] <= 0) {
-        choice = (choice+1) % 8;
-    }
-    --child[choice];
-    choice = rand() % 8;
-    ++child[choice];
+    --genes[i];
+    /* Increment random gene. */
+    ++genes[rand() % 8];
 }
 
 /* Look at all the bugs in the bug_list.  For each bug
@@ -295,15 +286,11 @@ void reproduceBugs(void) {
     for (int k = 0; k < num_bugs; k += 1) {
         if (bug_list[k].health > REPRODUCE_HEALTH) {
             /* Make the new bug. */
-            Bug b; 
-            b.x = bug_list[k].x;
-            b.y = bug_list[k].y;
-            b.dir = bug_list[k].dir;
-            b.health = bug_list[k].health/2;
-            b.generation = bug_list[k].generation+1;
+            Bug b = bug_list[k];
+            b.health /= 2;
+            b.generation++;
             b.age = 0;
-            mutateGenes(b.genes, bug_list[k].genes);
-
+            mutateGenes(b.genes);
             bug_list[k].health /= 2;
 
             /* Update global statistics based on the new genes in b */

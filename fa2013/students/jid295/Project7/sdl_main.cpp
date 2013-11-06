@@ -55,6 +55,7 @@ void apply_surface(int x, int y,
 
 void render_text(int x, int y, SDL_Surface *surface,
                  TTF_Font* font, char buff[], SDL_Color c) {
+    SDL_Surface* message = NULL;
     int lineskip = TTF_FontLineSkip(font);
     int line = 0;
     int i = 0;
@@ -62,9 +63,11 @@ void render_text(int x, int y, SDL_Surface *surface,
     while (buff[i]) {
         if (buff[i] == '\n') {
             buff[i++] = '\0';
+            message = TTF_RenderText_Blended(font, begin, c);
             apply_surface(x, y + line++*lineskip,
-                          TTF_RenderText_Blended(font, begin, c),
-                          surface);         
+                          message,
+                          surface);
+            SDL_FreeSurface(message);
             while(buff[i] == '\n') {
                 ++i;
             }
@@ -72,9 +75,11 @@ void render_text(int x, int y, SDL_Surface *surface,
         }
         ++i;
     }
+    message = TTF_RenderText_Blended(font, begin, c);
     apply_surface(x, y + line++*lineskip,
-                  TTF_RenderText_Blended(font, begin, c),
+                  message,
                   surface);
+    SDL_FreeSurface(message);
 }
 
 int sdl_init() {
@@ -188,7 +193,7 @@ void render_world(int world[WORLD_SIZE][WORLD_SIZE],
 }
 
 void tick(unsigned int n) {
-    for (int i = n; i > 0; --i) {
+    while(n--) {
         timeStep();
     }
 }
