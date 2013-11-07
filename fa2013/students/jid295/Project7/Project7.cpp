@@ -145,11 +145,11 @@ void addFood(void) {
 
 }
 
-int chooseDir(int genes[8]) {
+int chooseDir(int genes[GENE_COUNT]) {
     /* Roulette selection */
     int choice = rand() % GENE_TOTAL;
     int cum_sum = 0;
-    for (int i = 0; i < 8; ++i) {
+    for (int i = 0; i < GENE_COUNT; ++i) {
         cum_sum += genes[i];
         if (choice <= cum_sum) {
             return i;
@@ -243,7 +243,7 @@ void mutateGenes(int genes[GENE_COUNT]) {
     int i = 0;
     int choice = 0;
     /* Check non-zero genes. */
-    for (i = 0; i < 8; ++i) {
+    for (i = 0; i < GENE_COUNT; ++i) {
         if (genes[i]) {
             ++choice;
         }
@@ -259,7 +259,7 @@ void mutateGenes(int genes[GENE_COUNT]) {
     }
     --genes[i];
     /* Increment random gene. */
-    ++genes[rand() % 8];
+    ++genes[rand() % GENE_COUNT];
 }
 
 /* Look at all the bugs in the bug_list.  For each bug
