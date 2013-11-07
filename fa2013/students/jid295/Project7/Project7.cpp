@@ -218,26 +218,25 @@ void updateStatistics(int genes[]) {
 }
 
 void killDeadBugs(void) {
-    int i = bug_list.size()-1;
+    int i = bug_list.size() - 1;
     /* Negative health kills bugs. */
     while (i >= 0) {
+        /* Clear the square the bug occupied in the world if we are
+         * the only one there.
+         */
         if (bug_list[i].health <= 0) {
-            /* Clear the square the bug occupied in the world if we are
-             * the only one there.
-             */
             updateStatistics(bug_list[i].genes);
-            if(world[bug_list[i].x][bug_list[i].y] == i) {
+            if (world[bug_list[i].x][bug_list[i].y] == i)
                 world[bug_list[i].x][bug_list[i].y] = EMPTY;
-            }
             bug_list[i] = bug_list.back();
-            if (i != bug_list.size() -1) {
+            if (i != bug_list.size() - 1) {
                 world[bug_list.back().x][bug_list.back().y] = i;
             }
             bug_list.pop_back();
-        } else {
-            --i;
         }
+        --i;
     }
+
 }
 
 void mutateGenes(int genes[GENE_COUNT]) {
