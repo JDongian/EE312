@@ -5,7 +5,7 @@
 #include <vector>
 #include <map>
 
-#define INPUT_FILE "input2.txt"
+#define INPUT_FILE "input.txt"
 
 struct car_data {
     unsigned int laps;
@@ -49,7 +49,7 @@ int main () {
      */
     std::map<unsigned int, car_data*> car_map;
     /* Vector of number of laps and latest time. */
-    std::vector< std::pair<unsigned int, car_data*> > scores;
+    std::vector<std::pair<unsigned int, car_data*> > scores;
     /* Vector iterator. */
     std::map<unsigned int, car_data*>::iterator it;
     /* Remeber the best time ever. */
@@ -102,8 +102,8 @@ int main () {
     printf("There are %d cars in the race\n", int(scores.size()));
     /* Car index (placement) */
     int k = 1;
-    for(std::vector< std::pair<unsigned int,
-                               car_data*> >::iterator itr = scores.begin();
+    for(std::vector<std::pair<unsigned int,
+                              car_data*> >::iterator itr = scores.begin();
         itr != scores.end(); itr++) {
         /* Make sure to print 'the' for the best score. */
         printf("Position %d was car %d, completing %d laps with %s best lap"
