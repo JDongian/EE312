@@ -5,7 +5,7 @@
 #include <vector>
 #include <map>
 
-#define INPUT_FILE "input.txt"
+#define INPUT_FILE "input2.txt"
 
 struct car_data {
     unsigned int laps;
@@ -23,7 +23,7 @@ bool readNum(int& x) {
 bool comp_score(std::pair<unsigned int, car_data*> a,
                 std::pair<unsigned int, car_data*> b) {
     if (a.second->laps != b.second->laps) {
-        return a.second->laps < b.second->laps;
+        return a.second->laps > b.second->laps;
     } else {
         return a.second->last_time < b.second->last_time;
     }
@@ -110,7 +110,8 @@ int main () {
                " of %d.%03d seconds\n",
                k++, itr->first, itr->second->laps,
                (itr->second->best_lap == best_time_ever) ? "the" : "a",
-               itr->second->best_lap/1000, itr->second->best_lap%1000);
+               (unsigned int)(itr->second->best_lap)/1000,
+               (unsigned int)(itr->second->best_lap)%1000);
     }
     return 0;
 }
