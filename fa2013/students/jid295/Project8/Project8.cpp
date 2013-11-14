@@ -1,3 +1,9 @@
+/* Project 8.
+ * Chris is my TA.
+ * My name is Joshua Dong.
+ *
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
